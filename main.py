@@ -52,14 +52,14 @@ def getPiece(y,x):
 	return board[y][x]
 
 def moveRook(y,x,yy,xx):
-	if (x == xx and y != yy) or (y == yy and x != xx):
+	if (x == xx and y != yy) or (y == yy and x != xx): #TODO: check if hopping over piece (for i in range(a,b) will not run if a > b, so write function to swap these if moving to a lower indice)
 		return 1
 
 def moveBishop(y,x,yy,xx):
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
 		return 1
 
-def movePiece(y,x,yy,xx): #have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
+def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	piece = getPiece(y,x)
 	if piece == 0: #empty
 		return 0
@@ -78,7 +78,7 @@ def movePiece(y,x,yy,xx): #have this stupid ass elif tree because python 3.10 do
 		return moveBishop(y,x,yy,xx)
 
 	elif piece == 5: #queen
-		if moveBishop(y,x,yy,xx) or moveRook(y,x,yy,xx):
+		if moveBishop(y,x,yy,xx) or moveRook(y,x,yy,xx): #TODO: determine which movement is used to 
 			return 1
 
 	elif piece == 6: #king
@@ -86,8 +86,28 @@ def movePiece(y,x,yy,xx): #have this stupid ass elif tree because python 3.10 do
 			return 1
 	return 0
 
-def main():
-	#test
-	return
+def updateBoard(y,x,yy,xx):
+	board[xx][yy] = board[x][y] #update board position and clean out previous position
+	board[x][y] = 0
+	#TODO: check for gamestates (e.g check, checkmate, etc)
 
+
+def main():
+	initBoard()
+	play = True
+	while play == True:
+		for i in range(len(board)):
+			print(board[i])
+		y = int(input("move from row: "))
+		x = int(input("move from column: "))
+		yy = int(input("move to row: "))
+		xx = int(input("move to column: "))
+		if checkMoveValid(y,x,yy,xx) == 0:
+			print("invalid move")
+		else:
+			updateBoard(y,x,yy,xx)
+		if int(input("continue playing?: \n1 = yes 0 = no\n")) == 0:
+			play = False
+	return
+6
 if __name__ == '__main__': main()
