@@ -1,4 +1,3 @@
-"""
 import kivy
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -15,7 +14,7 @@ class ChessGame(Widget):
 class ChessApp(App):
 	def build(self):
 		return ChessGame()
-"""
+
 
 
 ### PIECE VALUES ###
@@ -65,7 +64,7 @@ def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.
 		return 0
 
 	elif piece == 1: #pawn
-		return (yy - y) == 1 * -piece
+		return (yy - y) == 1 * -piece #TODO: fix black piece movement; check for 2 space move from initial position
 
 	elif piece == 2: #rook
 		return moveRook(y,x,yy,xx)
@@ -102,13 +101,20 @@ def shellInterface():
 		print("invalid move")
 	else:
 		updateBoard(y,x,yy,xx)
+
 	if int(input("continue playing?: \n1 = yes 0 = no\n")) == 0:
-		play = False
+		return False
+	else:
+		return True
 
 def main():
 	initBoard()
 	play = True
+	ChessApp().run()
+	"""
 	while play == True:
-		shellInterface()
+		if shellInterface() == False:
+			play = False
+	"""
 	return
 if __name__ == '__main__': main()
