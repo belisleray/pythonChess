@@ -86,28 +86,29 @@ def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.
 			return 1
 	return 0
 
-def updateBoard(y,x,yy,xx):
-	board[xx][yy] = board[x][y] #update board position and clean out previous position
-	board[x][y] = 0
+def updateBoard(y,x,yy,xx): #update board position and clean out previous position
+	board[yy][xx] = board[y][x] 
+	board[y][x] = 0
 	#TODO: check for gamestates (e.g check, checkmate, etc)
 
+def shellInterface():
+	for i in range(len(board)):
+			print(board[i])
+	y = int(input("move from row: "))
+	x = int(input("move from column: "))
+	yy = int(input("move to row: "))
+	xx = int(input("move to column: "))
+	if checkMoveValid(y,x,yy,xx) == 0:
+		print("invalid move")
+	else:
+		updateBoard(y,x,yy,xx)
+	if int(input("continue playing?: \n1 = yes 0 = no\n")) == 0:
+		play = False
 
 def main():
 	initBoard()
 	play = True
 	while play == True:
-		for i in range(len(board)):
-			print(board[i])
-		y = int(input("move from row: "))
-		x = int(input("move from column: "))
-		yy = int(input("move to row: "))
-		xx = int(input("move to column: "))
-		if checkMoveValid(y,x,yy,xx) == 0:
-			print("invalid move")
-		else:
-			updateBoard(y,x,yy,xx)
-		if int(input("continue playing?: \n1 = yes 0 = no\n")) == 0:
-			play = False
+		shellInterface()
 	return
-6
 if __name__ == '__main__': main()
