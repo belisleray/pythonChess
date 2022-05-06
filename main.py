@@ -93,7 +93,7 @@ def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 	piece = abs(getPiece(y,x))
 	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	if piece == 1: #pawn
-		return (yy - y) == 1 * -piece #TODO: check for 2 space move from initial position; check if next place is blocks; check for diagonal capture
+		return (yy - y) == 1 * -getPiece(y,x) #TODO: check for 2 space move from initial position; check if next place is blocks; check for diagonal capture
 
 	elif piece == 2: #rook
 		return moveRook(y,x,yy,xx)
