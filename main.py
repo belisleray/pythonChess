@@ -85,7 +85,7 @@ def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.
 			return 1
 	return 0
 
-def updateBoard(y,x,yy,xx): #update board position and clean out previous position
+def updateBoard(y,x,yy,xx): #update board position and clean out previous position on board
 	board[yy][xx] = board[y][x] 
 	board[y][x] = 0
 	#TODO: check for gamestates (e.g check, checkmate, etc)
@@ -109,7 +109,6 @@ def shellInterface():
 
 def main():
 	initBoard()
-	play = True
 	ChessApp().run()
 	"""
 	while play == True:
