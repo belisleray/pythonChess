@@ -67,8 +67,22 @@ def initBoard():
 def getPiece(y,x):
 	return board[y][x]
 
+def sortVal(a,b):
+	if a > b:
+		return (b,a)
+	else:
+		return (a,b)
+
 def moveRook(y,x,yy,xx):
-	if (x == xx and y != yy) or (y == yy and x != xx): #TODO: check if hopping over piece (for i in range(a,b) will not run if a > b, so write function to swap these if moving to a lower indice)
+	if (x == xx and y != yy) or (y == yy and x != xx): 
+		yCoords = sortVal(y,yy)
+		xCoords = sortVal(x,xx)
+		for i in range(xCoords[0] + 1, (xCoords[1] - 1)): #we do not want to check the initial or final positions for occupied pieces, hence the +1/-1
+			if getPiece(yy, i) != 0:
+				return 0
+		for i in range(yCoords[0] + 1, (yCoords[1] - 1)):
+			if getPiece(xx, i) != 0:
+				return 0		
 		return 1
 
 def moveBishop(y,x,yy,xx): #TODO: check piece hopping
@@ -78,11 +92,8 @@ def moveBishop(y,x,yy,xx): #TODO: check piece hopping
 def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 	piece = abs(getPiece(y,x))
 	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
-	if piece == 0: #empty
-		return 0
-
-	elif piece == 1: #pawn
-		return (yy - y) == 1 * -piece #TODO: check for 2 space move from initial position
+	if piece == 1: #pawn
+		return (yy - y) == 1 * -piece #TODO: check for 2 space move from initial position; check if next place is blocks; check for diagonal capture
 
 	elif piece == 2: #rook
 		return moveRook(y,x,yy,xx)
