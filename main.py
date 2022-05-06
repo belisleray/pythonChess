@@ -19,6 +19,9 @@ class ChessBoard(GridLayout):
 						Button(
 							background_normal = '',
 							background_down = '',
+							text = key_to_str[board[k][v]],
+							font_size = 32,
+							color = (1, 0, 0, 1),
 							background_color = (1, 1, 1, 1)))
 
 				else:
@@ -26,6 +29,9 @@ class ChessBoard(GridLayout):
 						Button(
 							background_normal = '',
 							background_down = '',
+							text = key_to_str[board[k][v]],
+							font_size = 32,
+							color = (1, 0, 0, 1),
 							background_color = (0, 0, 0, 1)))
 
 class MainWidget(Widget):
@@ -47,6 +53,22 @@ class ChessApp(App):
 #   PIECE  COLOR   # 
 ####################
 
+key_to_str = {
+		-1 : "p",
+		-2 : "r",
+		-3 : "k",
+		-4 : "b",
+		-5 : "q",
+		-6 : "k",
+		0 : " ",
+		1 : "P",
+		2 : "R",
+		3 : "K",
+		4 : "B",
+		5 : "Q",
+		6 : "K",	
+	}
+
 def initBoard():
 	global board
 	board = [2,3,4,5,6,4,3,2],[1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1],[2,3,4,5,6,4,3,2]
@@ -60,12 +82,15 @@ def initBoard():
 	#[1,1,1,1,1,1,1,1],
 	#[2,3,4,5,6,4,3,2]  --white--
 
+	
+
 	for i in range(2):
 		for j in range(8):
 			board[i][j] *= -1
 
 def getPiece(y,x):
 	return board[y][x]
+
 
 def sortVal(a,b):
 	if a > b:
@@ -149,15 +174,15 @@ def shellInterface():
 def main():
 	initBoard()
 
-	#ChessApp().run()
+	ChessApp().run()
 
-	
+	"""
 	play = True
 	while play == True:
 		if shellInterface() == False:
 			play = False
 	
 	return
-
+"""
 
 if __name__ == '__main__': main()
