@@ -109,7 +109,7 @@ def updateBoard(y,x,yy,xx): #update board position and clean out previous positi
 	#TODO: check for gamestates (e.g check, checkmate, etc)
 
 def movePiece(y,x,yy,xx):
-	if not (checkMoveValid(y,x,yy,xx)):
+	if not checkMoveValid(y,x,yy,xx):
 		return False
 	elif (getPiece(y,x) > 0 and getPiece(yy,xx) > 0) or (getPiece(y,x) < 0 and getPiece(yy,xx) < 0): #checks if piece captures its own team
 		return False
@@ -120,12 +120,12 @@ def movePiece(y,x,yy,xx):
 def shellInterface():
 	for i in range(len(board)):
 			print(board[i])
-	y = int(input("move from row: "))
-	x = int(input("move from column: "))
+	y = int(input("move from y pos: "))
+	x = int(input("move from x pos: "))
 	print(str(getPiece(y,x)))
-	yy = int(input("move to row: "))
-	xx = int(input("move to column: "))
-	if checkMoveValid(y,x,yy,xx) == 0:
+	yy = int(input("move to y pos: "))
+	xx = int(input("move to x pos: "))
+	if not movePiece(y,x,yy,xx):
 		print("invalid move")
 	else:
 		updateBoard(y,x,yy,xx)
@@ -138,14 +138,14 @@ def shellInterface():
 def main():
 	initBoard()
 
-	ChessApp().run()
+	#ChessApp().run()
 
-	'''
+	
 	play = True
 	while play == True:
 		if shellInterface() == False:
 			play = False
-	'''
+	
 	return
 
 
