@@ -8,11 +8,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
 
-class chessCellW(BoxLayout):
-	pass
-class chessCellB(BoxLayout):
-	pass
-
 class ChessBoard(GridLayout):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
@@ -23,11 +18,14 @@ class ChessBoard(GridLayout):
 					self.add_widget(
 						Button(
 							background_normal = '',
+							background_down = '',
 							background_color = (1, 1, 1, 1)))
+
 				else:
 					self.add_widget(
 						Button(
 							background_normal = '',
+							background_down = '',
 							background_color = (0, 0, 0, 1)))
 
 class MainWidget(Widget):
@@ -69,7 +67,6 @@ def initBoard():
 def getPiece(y,x):
 	return board[y][x]
 
-
 def moveRook(y,x,yy,xx):
 	if (x == xx and y != yy) or (y == yy and x != xx): #TODO: check if hopping over piece (for i in range(a,b) will not run if a > b, so write function to swap these if moving to a lower indice)
 		return 1
@@ -78,7 +75,7 @@ def moveBishop(y,x,yy,xx): #TODO: check piece hopping
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
 		return 1
 
-def checkMoveValid(y,x,yy,xx): #TODO: invalidate moves that would capture a piece of the same color
+def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 	piece = abs(getPiece(y,x))
 	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	if piece == 0: #empty
@@ -110,6 +107,15 @@ def updateBoard(y,x,yy,xx): #update board position and clean out previous positi
 	board[yy][xx] = board[y][x] 
 	board[y][x] = 0
 	#TODO: check for gamestates (e.g check, checkmate, etc)
+
+def movePiece(y,x,yy,xx):
+	if not (checkMoveValid(y,x,yy,xx)):
+		return False
+	elif (getPiece(y,x) > 0 and getPiece(yy,xx) > 0) or (getPiece(y,x) < 0 and getPiece(yy,xx) < 0): #checks if piece captures its own team
+		return False
+	else:
+		return True
+		
 
 def shellInterface():
 	for i in range(len(board)):
