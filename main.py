@@ -15,7 +15,7 @@ class ChessApp(App):
 	def build(self):
 		return ChessGame()
 
-
+###kivy_venv\Scripts\activate### activate kivy virtual environment in shell before running the python script
 
 ### PIECE VALUES ###
 # 0          !EMPTY#
@@ -50,21 +50,23 @@ def initBoard():
 def getPiece(y,x):
 	return board[y][x]
 
+
 def moveRook(y,x,yy,xx):
 	if (x == xx and y != yy) or (y == yy and x != xx): #TODO: check if hopping over piece (for i in range(a,b) will not run if a > b, so write function to swap these if moving to a lower indice)
 		return 1
 
-def moveBishop(y,x,yy,xx):
+def moveBishop(y,x,yy,xx): #TODO: check piece hopping
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
 		return 1
 
-def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
-	piece = getPiece(y,x)
+def checkMoveValid(y,x,yy,xx): #TODO: invalidate moves that would capture a piece of the same color
+	piece = abs(getPiece(y,x))
+	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	if piece == 0: #empty
 		return 0
 
 	elif piece == 1: #pawn
-		return (yy - y) == 1 * -piece #TODO: fix black piece movement; check for 2 space move from initial position
+		return (yy - y) == 1 * -piece #TODO: check for 2 space move from initial position
 
 	elif piece == 2: #rook
 		return moveRook(y,x,yy,xx)
@@ -77,7 +79,7 @@ def checkMoveValid(y,x,yy,xx): #have this stupid ass elif tree because python 3.
 		return moveBishop(y,x,yy,xx)
 
 	elif piece == 5: #queen
-		if moveBishop(y,x,yy,xx) or moveRook(y,x,yy,xx): #TODO: determine which movement is used to 
+		if moveBishop(y,x,yy,xx) or moveRook(y,x,yy,xx):
 			return 1
 
 	elif piece == 6: #king
@@ -95,6 +97,7 @@ def shellInterface():
 			print(board[i])
 	y = int(input("move from row: "))
 	x = int(input("move from column: "))
+	print(str(getPiece(y,x)))
 	yy = int(input("move to row: "))
 	xx = int(input("move to column: "))
 	if checkMoveValid(y,x,yy,xx) == 0:
@@ -109,11 +112,12 @@ def shellInterface():
 
 def main():
 	initBoard()
-	ChessApp().run()
-	"""
+
+	#ChessApp().run()
+	play = True
 	while play == True:
 		if shellInterface() == False:
 			play = False
-	"""
+	
 	return
 if __name__ == '__main__': main()
