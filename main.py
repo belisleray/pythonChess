@@ -4,18 +4,37 @@ from kivy.uix.widget import Widget
 from kivy.lang.builder import Builder
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
 
-class ChessGame(Widget):
+class chessCellW(BoxLayout):
+	pass
+class chessCellB(BoxLayout):
 	pass
 
+class ChessBoard(GridLayout):
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
+		self.cols = 8
+		for k in range(8):
+			for v in range(8):
+				if ((k + v) % 2) == 0:
+					self.add_widget(
+						Button(
+							background_normal = '',
+							background_color = (1, 1, 1, 1)))
+				else:
+					self.add_widget(
+						Button(
+							background_normal = '',
+							background_color = (0, 0, 0, 1)))
+
+class MainWidget(Widget):
+	pass
 
 class ChessApp(App):
-	def build(self):
-		return ChessGame()
-
-###kivy_venv\Scripts\activate### activate kivy virtual environment in shell before running the python script
+	pass
 
 ### PIECE VALUES ###
 # 0          !EMPTY#
@@ -113,11 +132,15 @@ def shellInterface():
 def main():
 	initBoard()
 
-	#ChessApp().run()
+	ChessApp().run()
+
+	'''
 	play = True
 	while play == True:
 		if shellInterface() == False:
 			play = False
-	
+	'''
 	return
+
+
 if __name__ == '__main__': main()
