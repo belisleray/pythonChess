@@ -6,33 +6,39 @@ from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 
 
 class ChessBoard(GridLayout):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 		self.cols = 8
-		for k in range(8):
-			for v in range(8):
-				if ((k + v) % 2) == 0:
-					self.add_widget(
-						Button(
-							background_normal = '',
-							background_down = '',
-							text = key_to_str[board[k][v]],
-							font_size = 32,
-							color = (1, 0, 0, 1),
-							background_color = (1, 1, 1, 1)))
 
-				else:
-					self.add_widget(
-						Button(
-							background_normal = '',
-							background_down = '',
-							text = key_to_str[board[k][v]],
-							font_size = 32,
-							color = (1, 0, 0, 1),
-							background_color = (0, 0, 0, 1)))
+		def callback(instance):
+			print(str(instance.by) + " " + str(instance.bx))
+			instance.selected = (not instance.selected)
+
+		for i in range(8):
+			for j in range(8):
+				b = Button()
+				b.by = i
+				b.bx = j
+				b.selected = False
+				
+				b.bind(on_press = callback)
+
+				#b.background_normal = 'resource/image/block.png'
+				b.background_down = ''
+				b.text = key_to_str[board[i][j]]
+				b.font_size = 32
+				b.color = (1, 0, 0, 1)
+				b.background_color = (1, 1, 1, 1)
+				if ((i + j) % 2):
+					b.background_color = (0.3, 0.3, 0.3, 1)
+				self.add_widget(b)
+				
+						
 
 class MainWidget(Widget):
 	pass
@@ -56,14 +62,14 @@ class ChessApp(App):
 key_to_str = {
 		-1 : "p",
 		-2 : "r",
-		-3 : "k",
+		-3 : "n",
 		-4 : "b",
 		-5 : "q",
 		-6 : "k",
 		0 : " ",
 		1 : "P",
 		2 : "R",
-		3 : "K",
+		3 : "N",
 		4 : "B",
 		5 : "Q",
 		6 : "K",	
