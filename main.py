@@ -16,8 +16,25 @@ class ChessBoard(GridLayout):
 		self.cols = 8
 
 		def callback(instance):
-			print(str(instance.by) + " " + str(instance.bx))
+			global numCellSelected
+			global coordSelected
+			global coordDestination
+
 			instance.selected = (not instance.selected)
+			numCellSelected += ((instance.selected * 2) - 1) #changes bool (0/1) into -1/1 and adds it to the selected cell count to avoid iterating over the entire board to check for selected cells
+			
+			if numCellSelected == 1:
+				coordSelected = (instance.by, instance.bx)
+			elif numCellSelected == 2:
+				coordDestination = (instance.by, instance.bx)
+				if not movePiece(coordSelected[0], coordSelected[1], coordDestination[0], coordDestination[1]):
+					print("invalid move")
+				else:
+					updateBoard(coordSelected[0], coordSelected[1], coordDestination[0], coordDestination[1])
+				numCellSelected = 0
+				#TODO access selected cells and deselect them to avoid having a negative numCellSelected value
+				#TODO update graphics of cells
+			print(numCellSelected)
 
 		for i in range(8):
 			for j in range(8):
@@ -77,6 +94,14 @@ key_to_str = {
 
 def initBoard():
 	global board
+	global numCellSelected
+	global coordSelected
+	global coordDestination
+
+	numCellSelected = 0
+	coordSelected = (0,0)
+	coordDestination = (0,0)
+
 	board = [2,3,4,5,6,4,3,2],[1,1,1,1,1,1,1,1],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1],[2,3,4,5,6,4,3,2]
 	
 	#[2,3,4,5,6,4,3,2], --black--
@@ -182,13 +207,13 @@ def main():
 
 	ChessApp().run()
 
-	"""
+	
 	play = True
 	while play == True:
 		if shellInterface() == False:
 			play = False
 	
 	return
-"""
+
 
 if __name__ == '__main__': main()
