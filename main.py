@@ -27,6 +27,7 @@ class ChessBoard(GridLayout):
 
 			if numCellSelected == 1:
 				coordSelected = (instance.by, instance.bx)
+				instance.color = (0, 1, 0, 1)
 			elif numCellSelected == 2:
 				coordDestination = (instance.by, instance.bx)
 				if not movePiece(coordSelected[0], coordSelected[1], coordDestination[0], coordDestination[1]):
@@ -35,6 +36,7 @@ class ChessBoard(GridLayout):
 					updateBoard(coordSelected[0], coordSelected[1], coordDestination[0], coordDestination[1])
 					buttonArray[coordDestination[0]][coordDestination[1]].text = buttonArray[coordSelected[0]][coordSelected[1]].text
 					buttonArray[coordSelected[0]][coordSelected[1]].text = ""
+				buttonArray[coordSelected[0]][coordSelected[1]].color = (1, 0, 0, 1)
 				numCellSelected = 0
 				#TODO-low access selected cells and deselect them to avoid having a negative numCellSelected value and reuse previous selection codels
 
@@ -147,10 +149,10 @@ def moveRook(y,x,yy,xx):
 	if (x == xx and y != yy) or (y == yy and x != xx): #TODO-high: fix piece hopping
 		yCoords = sortVal(y,yy)
 		xCoords = sortVal(x,xx)
-		for i in range(xCoords[0] + 1, (xCoords[1] - 1)): #we do not want to check the initial or final positions for occupied pieces, hence the +1/-1
+		for i in range(xCoords[0] + 1, (xCoords[1])): #we do not want to check the rook itself for occupied pieces, hence the +1
 			if getPiece(yy, i) != 0:
 				return 0
-		for i in range(yCoords[0] + 1, (yCoords[1] - 1)):
+		for i in range(yCoords[0] + 1, (yCoords[1])):
 			if getPiece(xx, i) != 0:
 				return 0		
 		return 1
