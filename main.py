@@ -21,8 +21,6 @@ class ChessBoard(GridLayout):
 			global coordDestination
 			global buttonArray
 
-			#instance.selected = (not instance.selected)
-			#numCellSelected += ((instance.selected * 2) - 1) #changes bool (0/1) into -1/1 and adds it to the selected cell count to avoid iterating over the entire board to check for selected cells
 			numCellSelected += 1
 
 			if numCellSelected == 1:
@@ -38,7 +36,7 @@ class ChessBoard(GridLayout):
 					buttonArray[coordSelected[0]][coordSelected[1]].text = ""
 				buttonArray[coordSelected[0]][coordSelected[1]].color = (1, 0, 0, 1)
 				numCellSelected = 0
-				#TODO-low access selected cells and deselect them to avoid having a negative numCellSelected value and reuse previous selection codels
+				
 
 
 		global buttonArray
@@ -49,7 +47,6 @@ class ChessBoard(GridLayout):
 				b = Button()
 				b.by = i
 				b.bx = j
-				b.selected = False
 				
 				b.bind(on_press = callback)
 
@@ -146,22 +143,27 @@ def oppositeSigns(a, b):
     return ((a ^ b) < 0)
 
 def moveRook(y,x,yy,xx):
-	if (x == xx and y != yy) or (y == yy and x != xx): #TODO-high: fix piece hopping
+	if (x == xx and y != yy) or (y == yy and x != xx):
 		yCoords = sortVal(y,yy)
 		xCoords = sortVal(x,xx)
-		for i in range(xCoords[0] + 1, (xCoords[1])): #we do not want to check the rook itself for occupied pieces, hence the +1
+
+		for i in range(xCoords[0] + 1, xCoords[1]): #we do not want to check the rook itself for occupied pieces, hence the +1
 			if getPiece(yy, i) != 0:
 				return 0
-		for i in range(yCoords[0] + 1, (yCoords[1])):
-			if getPiece(xx, i) != 0:
-				return 0		
+		for i in range(yCoords[0] + 1, yCoords[1]):
+			if getPiece(i, xx) != 0:
+				return 0
 		return 1
 
 def moveBishop(y,x,yy,xx): #TODO-mid: check piece hopping
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
-		return 1
+		yCoords = sortVal(y,yy)
+		xCoords = sortVal(x,xx)
 
-def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
+		
+		pass
+
+def checkMoveValid(y,x,yy,xx): 
 	piece = abs(getPiece(y,x))
 	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	if piece == 1: #pawn
@@ -184,8 +186,7 @@ def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 		return moveBishop(y,x,yy,xx)
 
 	elif piece == 5: #queen
-		if moveBishop(y,x,yy,xx) or moveRook(y,x,yy,xx):
-			return 1
+		return (moveRook(y,x,yy,xx) or moveBishop(y,x,yy,xx))
 
 	elif piece == 6: #king
 		if abs(xx - x) == 1 or abs(yy - y) == 1:
