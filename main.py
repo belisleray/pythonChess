@@ -20,9 +20,10 @@ class ChessBoard(GridLayout):
 			global coordSelected
 			global coordDestination
 
-			instance.selected = (not instance.selected)
-			numCellSelected += ((instance.selected * 2) - 1) #changes bool (0/1) into -1/1 and adds it to the selected cell count to avoid iterating over the entire board to check for selected cells
-			
+			#instance.selected = (not instance.selected)
+			#numCellSelected += ((instance.selected * 2) - 1) #changes bool (0/1) into -1/1 and adds it to the selected cell count to avoid iterating over the entire board to check for selected cells
+			numCellSelected += 1
+
 			if numCellSelected == 1:
 				coordSelected = (instance.by, instance.bx)
 			elif numCellSelected == 2:
@@ -54,6 +55,7 @@ class ChessBoard(GridLayout):
 				if ((i + j) % 2):
 					b.background_color = (0.3, 0.3, 0.3, 1)
 				self.add_widget(b)
+				
 				
 						
 
@@ -129,6 +131,9 @@ def sortVal(a,b):
 	else:
 		return (a,b)
 
+def oppositeSigns(a, b):
+    return ((a ^ b) < 0)
+
 def moveRook(y,x,yy,xx):
 	if (x == xx and y != yy) or (y == yy and x != xx): 
 		yCoords = sortVal(y,yy)
@@ -149,7 +154,13 @@ def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 	piece = abs(getPiece(y,x))
 	#have this stupid ass elif tree because python 3.10 does not support win7 and python got switch statements A WEEK AGO
 	if piece == 1: #pawn
-		return (yy - y) == 1 * -getPiece(y,x) #TODO: check for 2 space move from initial position; check if next place is blocks; check for diagonal capture
+		if (yy - y) == 1 * -getPiece(y,x): #only check if verticality is correct
+			if (xx == x) and (getPiece(yy,xx) == 0):
+				return 1
+			elif ((xx - x == 1 or x - xx == 1) and getPiece(yy,xx) != 0) and (oppositeSigns(getPiece(y,x), getPiece(yy,xx))): #diagonal capture
+				return 1
+		elif (yy - y) == 2 * -getPiece(y,x) and y == 3.5 + (2.5 * getPiece(y,x)): #move 2 from start position
+			return 1
 
 	elif piece == 2: #rook
 		return moveRook(y,x,yy,xx)
