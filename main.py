@@ -19,6 +19,7 @@ class ChessBoard(GridLayout):
 			global numCellSelected
 			global coordSelected
 			global coordDestination
+			global buttonArray
 
 			#instance.selected = (not instance.selected)
 			#numCellSelected += ((instance.selected * 2) - 1) #changes bool (0/1) into -1/1 and adds it to the selected cell count to avoid iterating over the entire board to check for selected cells
@@ -32,10 +33,14 @@ class ChessBoard(GridLayout):
 					print("invalid move")
 				else:
 					updateBoard(coordSelected[0], coordSelected[1], coordDestination[0], coordDestination[1])
+					buttonArray[coordDestination[0]][coordDestination[1]].text = buttonArray[coordSelected[0]][coordSelected[1]].text
+					buttonArray[coordSelected[0]][coordSelected[1]].text = ""
 				numCellSelected = 0
-				#TODO access selected cells and deselect them to avoid having a negative numCellSelected value
-				#TODO update graphics of cells
-			print(numCellSelected)
+				#TODO-low access selected cells and deselect them to avoid having a negative numCellSelected value and reuse previous selection codels
+
+
+		global buttonArray
+		buttonArray = [[0 for i in range(8)] for i in range(8)]
 
 		for i in range(8):
 			for j in range(8):
@@ -55,6 +60,10 @@ class ChessBoard(GridLayout):
 				if ((i + j) % 2):
 					b.background_color = (0.3, 0.3, 0.3, 1)
 				self.add_widget(b)
+				buttonArray[i][j] = b
+
+		#print(self.children)
+		
 				
 				
 						
@@ -135,7 +144,7 @@ def oppositeSigns(a, b):
     return ((a ^ b) < 0)
 
 def moveRook(y,x,yy,xx):
-	if (x == xx and y != yy) or (y == yy and x != xx): 
+	if (x == xx and y != yy) or (y == yy and x != xx): #TODO-high: fix piece hopping
 		yCoords = sortVal(y,yy)
 		xCoords = sortVal(x,xx)
 		for i in range(xCoords[0] + 1, (xCoords[1] - 1)): #we do not want to check the initial or final positions for occupied pieces, hence the +1/-1
@@ -146,7 +155,7 @@ def moveRook(y,x,yy,xx):
 				return 0		
 		return 1
 
-def moveBishop(y,x,yy,xx): #TODO: check piece hopping
+def moveBishop(y,x,yy,xx): #TODO-mid: check piece hopping
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
 		return 1
 
@@ -184,7 +193,7 @@ def checkMoveValid(y,x,yy,xx): #checks ONLY for movement shape validity;
 def updateBoard(y,x,yy,xx): #update board position and clean out previous position on board
 	board[yy][xx] = board[y][x] 
 	board[y][x] = 0
-	#TODO: check for gamestates (e.g check, checkmate, etc)
+	#TODO-low: check for gamestates (e.g check, checkmate, etc)
 
 def movePiece(y,x,yy,xx):
 	if not checkMoveValid(y,x,yy,xx):
@@ -200,7 +209,7 @@ def shellInterface():
 			print(board[i])
 	y = int(input("move from y pos: "))
 	x = int(input("move from x pos: "))
-	print(str(getPiece(y,x)))
+	print(key_to_str[getPiece(y,x)])
 	yy = int(input("move to y pos: "))
 	xx = int(input("move to x pos: "))
 	if not movePiece(y,x,yy,xx):
@@ -218,11 +227,12 @@ def main():
 
 	ChessApp().run()
 
-	
-	play = True
-	while play == True:
-		if shellInterface() == False:
-			play = False
+	debug = False
+	if debug:
+		play = True
+		while play == True:
+			if shellInterface() == False:
+				play = False
 	
 	return
 
