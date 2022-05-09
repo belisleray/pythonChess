@@ -159,9 +159,13 @@ def moveBishop(y,x,yy,xx): #TODO-mid: check piece hopping
 	if (abs(xx - x) == abs(yy - y)) and (y != yy and x != xx):
 		yCoords = sortVal(y,yy)
 		xCoords = sortVal(x,xx)
+		yUp = (((y < yy) * 2) - 1)
+		xUp = (((x < xx) * 2) - 1)
 
-		
-		pass
+		for i in range(1, xCoords[1] - xCoords[0]): #using x or y is arbitary, this just gets the difference in movement
+			if getPiece(y + (i * yUp), x + (i * xUp)) != 0:
+				return 0
+		return 1
 
 def checkMoveValid(y,x,yy,xx): 
 	piece = abs(getPiece(y,x))
