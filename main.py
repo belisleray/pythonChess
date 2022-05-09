@@ -14,12 +14,14 @@ class ChessBoard(GridLayout):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
 		self.cols = 8
+		Window.size = (256, 256)
 
 		def callback(instance):
 			global numCellSelected
 			global coordSelected
 			global coordDestination
 			global buttonArray
+			global turnCount
 
 			numCellSelected += 1
 
@@ -36,6 +38,7 @@ class ChessBoard(GridLayout):
 					buttonArray[coordSelected[0]][coordSelected[1]].text = ""
 				buttonArray[coordSelected[0]][coordSelected[1]].color = (1, 0, 0, 1)
 				numCellSelected = 0
+				turnCount += 1
 				
 
 
@@ -50,14 +53,14 @@ class ChessBoard(GridLayout):
 				
 				b.bind(on_press = callback)
 
-				#b.background_normal = 'resource/image/block.png'
+				b.background_normal = 'resource/image/blockW.png'
 				b.background_down = ''
 				b.text = key_to_str[board[i][j]]
 				b.font_size = 32
 				b.color = (1, 0, 0, 1)
 				b.background_color = (1, 1, 1, 1)
 				if ((i + j) % 2):
-					b.background_color = (0.3, 0.3, 0.3, 1)
+					b.background_normal = 'resource/image/blockB.png'
 				self.add_widget(b)
 				buttonArray[i][j] = b
 
@@ -107,7 +110,9 @@ def initBoard():
 	global numCellSelected
 	global coordSelected
 	global coordDestination
+	global turnCount
 
+	turnCount = 0
 	numCellSelected = 0
 	coordSelected = (0,0)
 	coordDestination = (0,0)
